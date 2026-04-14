@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">Link Shortener</a>
+    <a class="btn btn-outline-primary ms-3" href="{% url 'index' %}">
+      Вернуться на Главную
+    </a>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+  <div class="alert alert-success text-center">
+    <h3>Вы успешно зашли в свой аккаунт!</h3>
+  </div>
+</div>
+{% endblock %}

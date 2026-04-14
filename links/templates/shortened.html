@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}Сокращённая ссылка{% endblock %}
+
+{% block content %}
+    <p>Ваша сокращённая ссылка:</p>
+    <a href="{{ short_code }}">{{ short_code }}</a>
+{% endblock %}

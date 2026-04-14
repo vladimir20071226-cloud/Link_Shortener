@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Сократить ссылку</h1>
+    <form method="post" action="{% url 'create_short_url' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="url" class="form-label">Введите ссылку:</label>
+            <input type="url" id="url" name="url" class="form-control" placeholder="https://example.com" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Сократить</button>
+    </form>
+</div>
+
+{% endblock %}
+
+

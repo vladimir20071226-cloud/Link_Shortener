@@ -1,0 +1,19 @@
+{% extends base.html %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'recent_links' %}" class="btn-btn-outline-primary">За 7 дней</a>
+</div>
+{% for short in links %}
+<p>ORIGINAL URL: {{ short_link.link.original_url }}</p>
+<p>UPDATED_ON: {{ link.updated_at }}</p>
+<p>CLICKS: {{ short_link.link.click_count }}</p>
+<a class="btn-btn-outline-success me-2" href="{% url 'stats' code=short.link.code %}">Статистика</a>
+<button class="btn btn-danger btn-sm delete-btn"
+            data-url="{{ delete_url }}"
+            data-code="{{ short_link.link.code }}">
+      Удалить
+    </button>
+<a class="btn btn-primary btn-sm" href="{% url 'link_copy' code=short.link.code %}">Копировать</a>
+{% empty %}
+  <p>Нет ссылок за последние 7 дней</p>
+{% endblock %}

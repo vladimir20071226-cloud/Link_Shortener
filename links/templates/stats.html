@@ -1,0 +1,45 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">SHORT LINK: {{ url.pk }}</h5>
+    <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
+    <p class="card-text">CREATED ON: {{ url.created_at }}</p>
+    <p class="card-text">CLICKS: {{ url.clicks_count }}</p>
+    {% if url.code %}
+      <a class="btn btn-outline-success me-2"
+         href="{% url 'stats' code=url.code %}">
+        Статистика
+      </a>
+    {% endif %}
+    <button class="btn btn-danger btn-sm delete-btn"
+            data-url="{{ delete_url }}"
+            data-code="{{ url.code }}">
+      Удалить
+    </button>
+    <a class="btn btn-primary btn-sm"
+       href="{{ copy_url }}">
+      Копировать
+    </a>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", function() {
+      const code = this.dataset.code;
+      fetch(`/delete/${code}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById(`row-${code}`).remove();
+        }
+      });
+    });
+  });
+});
+</script>
