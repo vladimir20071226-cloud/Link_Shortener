@@ -11,6 +11,19 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+DEBUG = config('DEBUG', default=False, cast=bool)
+SECRET_KEY = config('SECRET_KEY')
+
+sentry_sdk.init(
+    dsn=config('SENTRY_DSN'),
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +33,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qkl^4b1wqhf8ickdfe3p_3g3$b_j92%6y0len@q6ijkye=+1tt'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 

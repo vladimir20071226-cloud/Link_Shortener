@@ -5,7 +5,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta, timezone
 import requests
@@ -19,7 +18,7 @@ def create_short_url(request):
         if not original_url:
             return render(request, "error.html", {"message": "Не указан URL"})
         link = Link.objects.create(original_url=original_url)
-        short_code = reverse('redirect_url', args=[link.id])
+        short_code = reverse('redirect_url', args=[link.code])
         return render(request, 'shortened.html', {'short_code': short_code})
 
 #def shorten_url(request):
@@ -32,11 +31,11 @@ def create_short_url(request):
 #        return JsonResponse({"short_url": f"http://127.0.0.1:8000/{short_code}"})
 #    return render(request, "error.html", {"message": "Метод запроса не поддерживается"})
 
-def redirect_url(request, pk):
+def redirect_url(request, code):
     try:
-        url = Link.objects.get(pk=pk)
+        url = get_object_or_404(Link, code=code)
         url.click_count += 1
-        url.save()
+        url.save(update_fields=['click_count'])
     except ValueError:
         return render(request, "error.html", {"message": "Неверный код ссылки"})
     except ObjectDoesNotExist:
@@ -55,29 +54,32 @@ def user_login(request):
         else:
             return render(request, 'login_failed.html', {'username': username})
     return render(request, 'login.html')
-def stats(request, pk):
-    url_obj=get_object_or_404(Link, pk=pk)
-    return render(request, 'stats.html', {'url': url_obj,
-                                          'delete_url': reverse('link_delete', args=[url_obj.pk]),
-                                          'copy_url': reverse('link_copy', args=[url_obj.pk])})
+def search(request):
+    query=request.GET.get('s')
+    results=[]
+    if results:
+        results=Link.objects.filter(original_url__icontains=query)
+    return render(request, 'search.html', {'query': query, 'results': results})
+def stats(request):
+    urls=Link.objects.all()
+    if request.GET.get('days')=='7':
+        week_ago=timezone.now()-timedelta(days=7)
+        urls=urls.filter(updated_at__gte=week_ago)
+    return render(request, 'stats.html', {'urls': urls})
 @csrf_exempt
 def link_delete(request, pk):
     if request.method=='POST':
         link=Link.objects.get(pk=pk)
         link.delete()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'status': 400})
+        return redirect('/stats/?deleted=True')
+    return redirect('/stas/?deleted=False')
 def link_copy(request, pk):
     link=get_object_or_404(Link, pk=pk, user=request.user)
     new_link=Link.objects.create(original_url=link.original_url,
-                                 user=request.user)
-    new_link.code=encode_hex(new_link.pk)
+                                 user=request.user,
+                                 click_count=link.click_count)
     new_link.save()
-    return redirect('stats', code=new_link.code)
-def recent_links(request):
-    week_ago=timezone.now()-timedelta(weeks=1)
-    links = ShortUrl.objects.filter(updated_at__gte=week_ago, link__user=request.user)
-    return render(request,'recent_links.html', {'links': links})
+    return redirect('/stats/?copied=True')
 
 def user_logout(request):
     logout(request)
@@ -113,6 +115,8 @@ def google_callback(request):
     access_token=tokens.get("access_token")
     user_info=requests.get("https://www.googleapis.com/oauth2/v1/userinfo", headers= {"Authorization": f"Bearer {access_token}"}).json()
     return render (request,'login_success.html', {'user_info': user_info})
+def test_error(request):
+    division_by_zero = 1 / 0
 
 
 

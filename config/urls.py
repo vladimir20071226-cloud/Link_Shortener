@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 import links.views as views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', views.index, name='index'),
@@ -26,10 +27,11 @@ urlpatterns = [
     path('logout/', views.user_logout, name='user_logout'),
     path('auth/google', views.login_google, name='login_google'),
     path('auth/google/callback', views.google_callback, name='google_callback'),
-    path('recent/', views.recent_links, name='recent_links'),
+    path('stats/', views.stats, name='stats'),
+    path('test-error/', views.test_error, name='test-error'),
+    path('search/', views.search, name='search'),
 
-    path('stats/<int:pk>', views.stats, name='stats'),
     path('delete/<int:pk>', views.link_delete, name='link_delete'),
     path('copy/<int:pk>', views.link_copy, name='link_copy'),
-    path('<int:pk>/', views.redirect_url, name='redirect_url')
+    path('<str:code>/', views.redirect_url, name='redirect_url')
 ]

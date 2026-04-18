@@ -1,26 +1,41 @@
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title">SHORT LINK: {{ url.pk }}</h5>
-    <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
-    <p class="card-text">CREATED ON: {{ url.created_at }}</p>
-    <p class="card-text">CLICKS: {{ url.clicks_count }}</p>
-    {% if url.code %}
-      <a class="btn btn-outline-success me-2"
-         href="{% url 'stats' code=url.code %}">
-        Статистика
-      </a>
-    {% endif %}
-    <button class="btn btn-danger btn-sm delete-btn"
-            data-url="{{ delete_url }}"
-            data-code="{{ url.code }}">
-      Удалить
-    </button>
-    <a class="btn btn-primary btn-sm"
-       href="{{ copy_url }}">
-      Копировать
-    </a>
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if request.GET.deleted == 'true' %}
+    <div class="alert alert-success">Ссылка успешно удалена</div>
+  {% elif request.GET.deleted == 'false' %}
+    <div class="alert alert-danger">Ошибка</div>
+  {% endif %}
+
+  {% if request.GET.copied == 'true' %}
+    <div class="alert alert-success">Ссылка скопирована</div>
+  {% endif %}
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'stats' %}?days==7" class="btn btn-outline-primary">За 7 дней</a>
+    <a href="{% url 'stats' %}" class="btn btn-outline-secondary">Все ссылки</a>
   </div>
-</div>
+
+  {% for url in urls %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">SHORT LINK: {{ url.code }}</h5>
+        <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
+        <p class="card-text">CREATED ON: {{ url.created_at }}</p>
+        <p class="card-text">CLICKS: {{ url.click_count }}</p>
+
+        <form action="{% url 'link_delete' url.pk %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+        </form>
+
+        <a class="btn btn-secondary btn-sm" href="{% url 'link_copy' url.pk %}">Копировать</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>Нет ссылок</p>
+  {% endfor %}
+{% endblock %}
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {

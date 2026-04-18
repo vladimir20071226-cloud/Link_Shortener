@@ -1,0 +1,12 @@
+{}
+<form method="get">
+  <input type="text" name="s" placeholder="Введите имя сайта" value="{{ query }}"></form>>
+  <button type="submit">Поиск</button>
+</form>
+{% if results %}
+  <ul>
+    {% for link in results %}
+    <li>{{link.orginal_url}} -> {{link.code]}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

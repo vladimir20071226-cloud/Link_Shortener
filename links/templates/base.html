@@ -11,6 +11,9 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'index' %}">Link Shortener</a>
         <div class="d-flex ms-auto">
+            <a class="btn btn-outline-success me-2" href="{% url 'stats' %}">
+          Статистика
+        </a>
           {% if request.user.is_authenticated %}
             <span class="navbar-text me-3">
               Привет, {{ request.user.username }}
