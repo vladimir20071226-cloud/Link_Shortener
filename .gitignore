@@ -7,7 +7,6 @@ env/
 
 .idea/
 
-db.sqlite3
-*.sqlite3
+
 
 .env
