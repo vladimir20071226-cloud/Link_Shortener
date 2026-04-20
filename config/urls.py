@@ -29,7 +29,6 @@ urlpatterns = [
     path('auth/google/callback', views.google_callback, name='google_callback'),
     path('stats/', views.stats, name='stats'),
     path('test-error/', views.test_error, name='test-error'),
-    path('search/', views.search, name='search'),
 
     path('delete/<int:pk>', views.link_delete, name='link_delete'),
     path('copy/<int:pk>', views.link_copy, name='link_copy'),

@@ -15,27 +15,42 @@
     <a href="{% url 'stats' %}?days==7" class="btn btn-outline-primary">За 7 дней</a>
     <a href="{% url 'stats' %}" class="btn btn-outline-secondary">Все ссылки</a>
   </div>
+  <form method="get">
+    <input type="text" name="s" placeholder="Введите имя сайта" value="{{ query }}"></form>>
+  </form>
+  {% if urls %}
+    {% for url in urls %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">SHORT LINK: {{ url.code }}</h5>
+          <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
+          <p class="card-text">CREATED ON: {{ url.created_at }}</p>
+          <p class="card-text">CLICKS: {{ url.click_count }}</p>
 
-  {% for url in urls %}
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">SHORT LINK: {{ url.code }}</h5>
-        <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
-        <p class="card-text">CREATED ON: {{ url.created_at }}</p>
-        <p class="card-text">CLICKS: {{ url.click_count }}</p>
+          <form action="{% url 'link_delete' url.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+          </form>
 
-        <form action="{% url 'link_delete' url.pk %}" method="post" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-        </form>
-
-        <a class="btn btn-secondary btn-sm" href="{% url 'link_copy' url.pk %}">Копировать</a>
+          <a class="btn btn-secondary btn-sm" href="{% url 'link_copy' url.pk %}">Копировать</a>
+        </div>
       </div>
-    </div>
-  {% empty %}
-    <p>Нет ссылок</p>
-  {% endfor %}
+    {% endfor %}
+  {% else %}
+      <p>Нет ссылок</p>
+  {% endif %}
 {% endblock %}
+
+<script>
+function copyLink() {
+  const linkField = document.getElementById("shortLink");
+  linkField.select();
+  linkField.setSelectionRange(0, 99999); // для мобильных
+  navigator.clipboard.writeText(linkField.value)
+    .then(() => alert("Ссылка скопирована!"))
+    .catch(err => console.error("Ошибка копирования:", err));
+}
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {

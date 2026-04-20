@@ -54,18 +54,16 @@ def user_login(request):
         else:
             return render(request, 'login_failed.html', {'username': username})
     return render(request, 'login.html')
-def search(request):
-    query=request.GET.get('s')
-    results=[]
-    if results:
-        results=Link.objects.filter(original_url__icontains=query)
-    return render(request, 'search.html', {'query': query, 'results': results})
 def stats(request):
+    query=request.GET.get('s')
     urls=Link.objects.all()
     if request.GET.get('days')=='7':
         week_ago=timezone.now()-timedelta(days=7)
         urls=urls.filter(updated_at__gte=week_ago)
-    return render(request, 'stats.html', {'urls': urls})
+    if query:
+        urls=Link.objects.filter(original_url__icontains=query)
+    urls = urls.order_by('-click_count')
+    return render(request, 'stats.html', {'urls': urls, 'query': query})
 @csrf_exempt
 def link_delete(request, pk):
     if request.method=='POST':
@@ -74,9 +72,8 @@ def link_delete(request, pk):
         return redirect('/stats/?deleted=True')
     return redirect('/stas/?deleted=False')
 def link_copy(request, pk):
-    link=get_object_or_404(Link, pk=pk, user=request.user)
+    link=get_object_or_404(Link, pk=pk)
     new_link=Link.objects.create(original_url=link.original_url,
-                                 user=request.user,
                                  click_count=link.click_count)
     new_link.save()
     return redirect('/stats/?copied=True')
