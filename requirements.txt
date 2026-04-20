@@ -4,3 +4,5 @@ django-sslserver==0.22
 gunicorn==21.2.0
 setuptools
 wheel
+python-decouple
+sentry-sdk
