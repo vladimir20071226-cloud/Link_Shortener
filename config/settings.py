@@ -37,7 +37,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ['link-shortener.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['link-shortener-8t4p.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
