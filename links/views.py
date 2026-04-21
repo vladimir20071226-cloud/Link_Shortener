@@ -94,7 +94,7 @@ def user_register(request):
 def login_google(request):
     url = ("https://accounts.google.com/o/oauth2/auth"
         "?client_id=646850686903-ovuh53047frn24ioe5icorcdd6sjcog8"
-        "&redirect_uri=http://localhost:8000/auth/google/callback"
+        "&redirect_uri=http://link-shortener-tonka.onrender.com/auth/google/callback"
         "&response_type=code"
         "&scope=openid email profile")
     return redirect(url)
@@ -105,7 +105,7 @@ def google_callback(request):
     data = {"code": code,
             "client_id": "646850686903-ovuh53047frn24ioe5icorcdd6sjcog8",
             "client_secret": "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",
-           "redirect_uri": "http://localhost:8000/auth/google/callback",
+           "redirect_uri": "http://link-shortener-tonka/auth/google/callback",
            "grant_type": "authorization_code"}
     token_response=requests.post(token_url, data=data)
     tokens=token_response.json()
