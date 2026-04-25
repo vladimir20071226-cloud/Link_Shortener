@@ -14,16 +14,19 @@ from pathlib import Path
 from decouple import config
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 DEBUG = config('DEBUG', default=False, cast=bool)
 SECRET_KEY = config('SECRET_KEY')
-
 sentry_sdk.init(
     dsn=config('SENTRY_DSN'),
     integrations=[DjangoIntegration()],
     traces_sample_rate=1.0,
     send_default_pii=True
 )
+CLIENT_ID=os.getenv('CLIENT_ID')
+CLIENT_SECRET=os.getenv('CLIENT_SECRET')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

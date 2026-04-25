@@ -6,3 +6,4 @@ setuptools
 wheel
 python-decouple
 sentry-sdk
+python-dotenv

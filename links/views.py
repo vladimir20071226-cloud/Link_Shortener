@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta, timezone
+from Link_Shortener.config.settings import CLIENT_ID, CLIENT_SECRET
 import requests
 def index(request):
     return render(request, "index.html")
@@ -56,14 +57,20 @@ def user_login(request):
     return render(request, 'login.html')
 def stats(request):
     query=request.GET.get('s')
+    days=request.GET.get('days')
     urls=Link.objects.all()
-    if request.GET.get('days')=='7':
+    link=urls.filter(id=query).first()
+    clicks=None
+    if link:
+        week_ago=timezone.now()-timedelta(weeks=1)
+        clicks=ShortUrl.objects.filter(link=link,
+                              update_at__gte=week_ago).count()
+    if days == '7':
         week_ago=timezone.now()-timedelta(days=7)
-        urls=urls.filter(updated_at__gte=week_ago)
+        urls=urls.filter(created_at__gte=week_ago)
     if query:
-        urls=Link.objects.filter(original_url__icontains=query)
-    urls = urls.order_by('-click_count')
-    return render(request, 'stats.html', {'urls': urls, 'query': query})
+        urls=urls.filter(original_url__icontains=query)
+    return render(request, 'stats.html', {'urls': urls, 'query': query, 'clicks': clicks})
 @csrf_exempt
 def link_delete(request, pk):
     if request.method=='POST':
@@ -77,7 +84,6 @@ def link_copy(request, pk):
                                  click_count=link.click_count)
     new_link.save()
     return redirect('/stats/?copied=True')
-
 def user_logout(request):
     logout(request)
     return redirect('index')
@@ -93,7 +99,7 @@ def user_register(request):
     return render(request, 'register.html')
 def login_google(request):
     url = ("https://accounts.google.com/o/oauth2/auth"
-        "?client_id=646850686903-ovuh53047frn24ioe5icorcdd6sjcog8"
+        f"?client_id={CLIENT_ID}"
         "&redirect_uri=http://link-shortener-2alive.onrender.com/auth/google/callback"
         "&response_type=code"
         "&scope=openid email profile")
@@ -103,8 +109,8 @@ def google_callback(request):
     code=request.GET.get("code")
     token_url = "https://oauth2.googleapis.com/token"
     data = {"code": code,
-            "client_id": "646850686903-ovuh53047frn24ioe5icorcdd6sjcog8",
-            "client_secret": "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",
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
            "redirect_uri": "http://link-shortener-2alive.onrender.com/auth/google/callback",
            "grant_type": "authorization_code"}
     token_response=requests.post(token_url, data=data)
