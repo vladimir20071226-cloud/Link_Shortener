@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta, timezone
 from Link_Shortener.config.settings import CLIENT_ID, CLIENT_SECRET
+from django.db.models import Q, Count
 import requests
 def index(request):
     return render(request, "index.html")
@@ -63,8 +64,9 @@ def stats(request):
     clicks=None
     if link:
         week_ago=timezone.now()-timedelta(weeks=1)
-        clicks=ShortUrl.objects.filter(link=link,
-                              update_at__gte=week_ago).count()
+        urls = urls.annotate(
+            clicks_last_week=Count('shorturl', filter=Q(shorturl__update_at__gte=week_ago))
+        )
     if days == '7':
         week_ago=timezone.now()-timedelta(days=7)
         urls=urls.filter(created_at__gte=week_ago)

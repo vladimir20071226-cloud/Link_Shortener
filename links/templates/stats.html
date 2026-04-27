@@ -25,7 +25,8 @@
           <h5 class="card-title">SHORT LINK: {{ url.code }}</h5>
           <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>
-          <p class="card-text">CLICKS: {{ url.click_count }}</p>
+          <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
+          <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
 
           <form action="{% url 'link_delete' url.pk %}" method="post" style="display:inline;">
             {% csrf_token %}
