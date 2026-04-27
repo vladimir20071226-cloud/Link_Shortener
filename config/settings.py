@@ -14,7 +14,7 @@ from pathlib import Path
 from decouple import config
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG')
 SECRET_KEY = config('SECRET_KEY')
 CLIENT_ID = config('CLIENT_ID')
 CLIENT_SECRET = config('CLIENT_SECRET')
