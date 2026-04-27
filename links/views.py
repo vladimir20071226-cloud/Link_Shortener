@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta, timezone
-from Link_Shortener.config.settings import CLIENT_ID, CLIENT_SECRET
+from config.settings import CLIENT_ID, CLIENT_SECRET
 from django.db.models import Q, Count
 import requests
 def index(request):
