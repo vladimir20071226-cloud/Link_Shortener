@@ -100,7 +100,7 @@ def user_register(request):
         return  redirect('index')
     return render(request, 'register.html')
 def login_google(request):
-    url = ("https://accounts.google.com/o/oauth2/auth"
+    url = ("https://accounts.google.com/o/oauth2/v2/auth"
         f"?client_id={CLIENT_ID}"
         "&redirect_uri=http://link-shortener-2alive.onrender.com/auth/google/callback"
         "&response_type=code"

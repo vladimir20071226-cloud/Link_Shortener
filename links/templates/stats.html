@@ -15,9 +15,12 @@
     <a href="{% url 'stats' %}?days==7" class="btn btn-outline-primary">За 7 дней</a>
     <a href="{% url 'stats' %}" class="btn btn-outline-secondary">Все ссылки</a>
   </div>
+  {% if query %}
   <form method="get">
-    <input type="text" name="s" placeholder="Введите имя сайта" value="{{ query }}"></form>>
+    <input type="text" name="s" placeholder="Введите имя сайта" value="{{ query }}"></form>
+    <button type="submit">Поиск по имени сайта</button>
   </form>
+  {% endif %}
   {% if urls %}
     {% for url in urls %}
       <div class="card mb-3">
@@ -26,7 +29,10 @@
           <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>
           <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
-          <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
+          {% if url.clicks_last_week is not None %}
+            <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
+          {% endif %}
+
 
           <form action="{% url 'link_delete' url.pk %}" method="post" style="display:inline;">
             {% csrf_token %}
