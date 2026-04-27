@@ -17,5 +17,5 @@ class Link(models.Model):
     def __str__(self):
         return f"{self.code} -> {self.original_url}"
 class ShortUrl(models.Model):
-    link=models.ForeignKey(Link, on_delete=models.CASCADE, related_name='click_last_week')
+    link=models.ForeignKey(Link, on_delete=models.CASCADE, related_name='clicks_last_week')
     update_at=models.DateTimeField(auto_now_add=True)
