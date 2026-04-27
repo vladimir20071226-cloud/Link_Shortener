@@ -25,7 +25,7 @@
     {% for url in urls %}
       <div class="card mb-3">
         <div class="card-body">
-          <h5 class="card-title">SHORT LINK: <a href="/{{ url.code }}" target="_blank">{{ url.code }</h5>
+          <h5 class="card-title">SHORT LINK: <a href="/{{ url.code }}" target="_blank">{{ url.code }</a></h5>
           <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>
           <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
