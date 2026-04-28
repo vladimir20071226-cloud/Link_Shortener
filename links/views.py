@@ -60,19 +60,20 @@ def stats(request):
     query=request.GET.get('s')
     days=request.GET.get('days')
     urls=Link.objects.all()
-    link=urls.filter(id=query).first()
-    clicks=None
-    if link:
-        week_ago=timezone.now()-timedelta(weeks=1)
-        urls = urls.annotate(
-            clicks_last_week=Count('shorturl', filter=Q(shorturl__update_at__gte=week_ago))
-        )
+    week_ago=timezone.now()-timedelta(weeks=1)
+    urls = urls.annotate(clicks_last_week=Count('shorturl', filter=Q(shorturl__update_at__gte=week_ago)))
     if days == '7':
-        week_ago=timezone.now()-timedelta(days=7)
-        urls=urls.filter(created_at__gte=week_ago)
+        try:
+            week_ago=timezone.now()-timedelta(days=7)
+            urls=urls.filter(created_at__gte=week_ago)
+        except ValueError:
+            pass
     if query:
         urls=urls.filter(original_url__icontains=query)
-    return render(request, 'stats.html', {'urls': urls, 'query': query, 'clicks': clicks})
+    context={'urls': urls,
+             'days': days,
+             'query': query}
+    return render(request, 'stats.html', context)
 @csrf_exempt
 def link_delete(request, pk):
     if request.method=='POST':
