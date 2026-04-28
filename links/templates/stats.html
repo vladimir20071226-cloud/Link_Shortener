@@ -25,7 +25,16 @@
     {% for url in urls %}
       <div class="card mb-3">
         <div class="card-body">
-          <h5 class="card-title">SHORT LINK: {{ url.code }}</h5>
+          <h5 class="card-title d-flex align-items-center">
+            <span class="me-2">SHORT LINK:</span>
+            <a href="{% url 'redirect_short_link' url.code %}" target="_blank" class="me-2">
+              {{ request.build_absolute_uri }}/{{ url.code }}
+            </a>
+          <button class="btn btn-sm btn-outline-secondary"
+                  onclick="copyToClipboard('{{ request.build_absolute_uri }}/{{ url.code }}')">
+            Копировать
+          </button>
+          </h5>
           <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>
           <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
@@ -48,6 +57,15 @@
   {% endif %}
 {% endblock %}
 
+<script>
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+      alert("Ссылка скопирована: " + text);
+    }, function(err) {
+      alert("Ошибка копирования: " + err);
+    });
+  }
+</script>
 <script>
 function copyLink() {
   const linkField = document.getElementById("shortLink");
