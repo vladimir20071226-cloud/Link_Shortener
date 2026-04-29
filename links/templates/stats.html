@@ -38,13 +38,9 @@
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>
           <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
             <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
-
-
-          <form action="{% url 'link_delete' url.pk %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-          </form>
-
+            <button class="btn btn-danger btn-sm delete-btn" data-code="{{ url.code }}">
+            Удалить
+          </button>
           <a class="btn btn-secondary btn-sm" href="{% url 'link_copy' url.pk %}">Копировать</a>
         </div>
       </div>
@@ -64,17 +60,6 @@
   }
 </script>
 <script>
-function copyLink() {
-  const linkField = document.getElementById("shortLink");
-  linkField.select();
-  linkField.setSelectionRange(0, 99999); // для мобильных
-  navigator.clipboard.writeText(linkField.value)
-    .then(() => alert("Ссылка скопирована!"))
-    .catch(err => console.error("Ошибка копирования:", err));
-}
-</script>
-
-<script>
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll(".delete-btn").forEach(btn => {
     btn.addEventListener("click", function() {
@@ -89,8 +74,11 @@ document.addEventListener("DOMContentLoaded", function() {
       .then(data => {
         if (data.success) {
           document.getElementById(`row-${code}`).remove();
+        } else {
+        alert("Ошибка удаления");
         }
-      });
+      })
+      .catch(err => console.error("Ошибка запроса:", err));
     });
   });
 });
