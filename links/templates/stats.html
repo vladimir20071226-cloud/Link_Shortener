@@ -23,26 +23,7 @@
   {% endif %}
   {% if urls %}
     {% for url in urls %}
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title d-flex align-items-center">SHORT LINK:
-            <a href="{% url 'redirect_short_link' url.code %}" target="_blank" class="me-2">
-                {{ base_url }}{{ url.code }}
-            </a>
-            <button class="btn btn-sm btn-outline-secondary"
-                    onclick="copyToClipboard('{{ base_url }}{{ url.code }}')">
-                Копировать
-            </button>
-          </h5>
-          <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
-          <p class="card-text">CREATED ON: {{ url.created_at }}</p>
-          <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
-          <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
-          <button class="btn btn-danger btn-sm delete-btn" data-code="{{ url.code }}">
-            Удалить
-          </button>
-        </div>
-      </div>
+      {{ url.id }} — {{ url.clicks_last_week }}
     {% endfor %}
   {% else %}
       <p>Нет ссылок</p>
