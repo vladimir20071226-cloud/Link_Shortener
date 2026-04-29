@@ -23,7 +23,7 @@
   {% endif %}
   {% if urls %}
     {% for url in urls %}
-      <div class="card mb-3" id="row-{{ url.code }}">
+      <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title d-flex align-items-center">SHORT LINK:
             <a href="{% url 'redirect_short_link' url.code %}" target="_blank" class="me-2">
@@ -37,11 +37,10 @@
           <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>
           <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
-            <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
-            <button class="btn btn-danger btn-sm delete-btn" data-code="{{ url.code }}">
+          <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
+          <button class="btn btn-danger btn-sm delete-btn" data-code="{{ url.code }}">
             Удалить
           </button>
-          <a class="btn btn-secondary btn-sm" href="{% url 'link_copy' url.pk %}">Копировать</a>
         </div>
       </div>
     {% endfor %}
