@@ -26,14 +26,13 @@
       <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title d-flex align-items-center">
-            <span class="me-2">SHORT LINK:</span>
             <a href="{% url 'redirect_short_link' url.code %}" target="_blank" class="me-2">
-              {{ request.build_absolute_uri }}/{{ url.code }}
+                {{ base_url }}{{ url.code }}
             </a>
-          <button class="btn btn-sm btn-outline-secondary"
-                  onclick="copyToClipboard('{{ request.build_absolute_uri }}/{{ url.code }}')">
-            Копировать
-          </button>
+            <button class="btn btn-sm btn-outline-secondary"
+                    onclick="copyToClipboard('{{ base_url }}{{ url.code }}')">
+                Копировать
+            </button>
           </h5>
           <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>

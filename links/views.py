@@ -62,6 +62,7 @@ def stats(request):
     urls=Link.objects.all()
     week_ago=timezone.now()-timedelta(weeks=1)
     urls = urls.annotate(clicks_last_week=Count('shorturl', filter=Q(shorturl__update_at__gte=week_ago)))
+    base_url=request.build_absolute_uri('/')
     if days == '7':
         try:
             week_ago=timezone.now()-timedelta(days=7)
@@ -72,7 +73,8 @@ def stats(request):
         urls=urls.filter(original_url__icontains=query)
     context={'urls': urls,
              'days': days,
-             'query': query}
+             'query': query,
+             'base_url': base_url}
     return render(request, 'stats.html', context)
 @csrf_exempt
 def link_delete(request, pk):
