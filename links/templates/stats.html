@@ -23,7 +23,7 @@
   {% endif %}
   {% if urls %}
     {% for url in urls %}
-      <div class="card mb-3">
+      <div class="card mb-3" id="row-{{ url.code }}">
         <div class="card-body">
           <h5 class="card-title d-flex align-items-center">SHORT LINK:
             <a href="{% url 'redirect_short_link' url.code %}" target="_blank" class="me-2">
