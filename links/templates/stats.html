@@ -25,7 +25,7 @@
     {% for url in urls %}
       <div class="card mb-3">
         <div class="card-body">
-          <h5 class="card-title d-flex align-items-center">
+          <h5 class="card-title d-flex align-items-center">SHORT LINK:
             <a href="{% url 'redirect_short_link' url.code %}" target="_blank" class="me-2">
                 {{ base_url }}{{ url.code }}
             </a>
@@ -37,9 +37,7 @@
           <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
           <p class="card-text">CREATED ON: {{ url.created_at }}</p>
           <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
-          {% if url.clicks_last_week is not None %}
             <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
-          {% endif %}
 
 
           <form action="{% url 'link_delete' url.pk %}" method="post" style="display:inline;">
