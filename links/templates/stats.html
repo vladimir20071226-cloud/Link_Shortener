@@ -12,7 +12,7 @@
   {% endif %}
 
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <a href="{% url 'stats' %}?days==7" class="btn btn-outline-primary">За 7 дней</a>
+    <a href="{% url 'stats' %}?days=7" class="btn btn-outline-primary">За 7 дней</a>
     <a href="{% url 'stats' %}" class="btn btn-outline-secondary">Все ссылки</a>
   </div>
   {% if query %}
