@@ -23,7 +23,18 @@
   {% endif %}
   {% if urls %}
     {% for url in urls %}
-      {{ url.id }} — {{ url.clicks_last_week }}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title d-flex align-items-center">SHORT LINK: {{url.code}}</h5>
+          <p class="card-text">ORIGINAL URL: {{ url.original_url }}</p>
+          <p class="card-text">CREATED ON: {{ url.created_at }}</p>
+          <p class="card-text">CLICKS (all time): {{ url.click_count }}</p>
+          <p class="card-text">CLICKS (last 7 days): {{ url.clicks_last_week }}</p>
+          <button class="btn btn-danger btn-sm delete-btn" data-code="{{ url.code }}">
+            Удалить
+          </button>
+        </div>
+      </div>
     {% endfor %}
   {% else %}
       <p>Нет ссылок</p>
