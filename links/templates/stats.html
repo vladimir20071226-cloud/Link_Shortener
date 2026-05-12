@@ -26,7 +26,7 @@
       <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title d-flex align-items-center">SHORT LINK:
-            <a href="{% url 'redirect_short_link' url.code %}" target="_blank" class="me-2">
+            <a href="{% url 'redirect_url' url.code %}" target="_blank" class="me-2">
                 {{ base_url }}{{ url.code }}
             </a>
             <button class="btn btn-sm btn-outline-secondary"

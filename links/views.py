@@ -59,9 +59,8 @@ def user_login(request):
 def stats(request):
     query=request.GET.get('s')
     days=request.GET.get('days')
-    urls=Link.objects.all()
     week_ago=timezone.now()-timedelta(weeks=1)
-    urls = urls.annotate(clicks_last_week=Count('shorturl', filter=Q(shorturl__update_at__gte=week_ago)))
+    urls = Link.objects.annotate(clicks_last_week=Count('shorturl', filter=Q(shorturl__update_at__gte=week_ago)))
     base_url=request.build_absolute_uri('/')
     if days == '7':
         try:
@@ -82,7 +81,7 @@ def link_delete(request, pk):
         link=Link.objects.get(pk=pk)
         link.delete()
         return redirect('/stats/?deleted=True')
-    return redirect('/stas/?deleted=False')
+    return redirect('/stats/?deleted=False')
 def link_copy(request, pk):
     link=get_object_or_404(Link, pk=pk)
     new_link=Link.objects.create(original_url=link.original_url,
